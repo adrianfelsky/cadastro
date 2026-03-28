@@ -2,48 +2,33 @@ import sqlite3 as sql
 
 class Database:
     def __init__(self, db_name="clientes.db"):
-        """
-        Construtor da classe.
-        Inicializa o nome do banco e variáveis de conexão.
-        """
         self.db_name = db_name
         self.conn = None
         self.cursor = None
 
     def connect(self):
-        """Abre conexão com o banco"""
         self.conn = sql.connect(self.db_name)
         self.cursor = self.conn.cursor()
 
     def disconnect(self):
-        """Fecha conexão com o banco"""
         if self.conn:
             self.conn.close()
 
     def execute(self, query, params=None):
-        """
-        Executa comandos SQL (INSERT, UPDATE, DELETE, SELECT)
-        """
         if params:
             self.cursor.execute(query, params)
         else:
             self.cursor.execute(query)
 
     def fetchall(self):
-        """Retorna todos os resultados"""
         return self.cursor.fetchall()
 
     def commit(self):
-        """Salva alterações no banco"""
         if self.conn:
             self.conn.commit()
 
 
 class ClienteDAO:
-    """
-    DAO = Data Access Object
-    Responsável pelas operações da tabela clientes
-    """
 
     def __init__(self):
         self.db = Database()

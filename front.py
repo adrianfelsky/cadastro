@@ -33,17 +33,15 @@ class Gui():
         self.list_clientes.configure(yscrollcommand=scroll.set)
         scroll.configure(command=self.list_clientes.yview)
 
-        Button(self.window, text='Ver todos').grid(row=4, column=0, columnspan=2)
-        Button(self.window, text='Buscar').grid(row=5, column=0, columnspan=2)
-        Button(self.window, text='Inserir').grid(row=6, column=0, columnspan=2)
-        Button(self.window, text='Atualizar').grid(row=7, column=0, columnspan=2)
-        Button(self.window, text='Deletar Usuários').grid(row=8, column=0, columnspan=2)
-        Button(self.window, text='Fechar', command=self.window.destroy).grid(row=9, column=0, columnspan=2)
+        self.btn_view_all = Button(self.window, text='Ver todos').grid(row=4, column=0, columnspan=2)
+        self.btn_buscar = Button(self.window, text='Buscar').grid(row=5, column=0, columnspan=2)
+        self.btn_inserir = Button(self.window, text='Inserir').grid(row=6, column=0, columnspan=2)
+        self.btn_atualizar = Button(self.window, text='Atualizar').grid(row=7, column=0, columnspan=2)
+        self.btn_deletar = Button(self.window, text='Deletar Usuários').grid(row=8, column=0, columnspan=2)
+        self.btn_fechar = Button(self.window, text='Fechar', command=self.window.destroy).grid(row=9, column=0, columnspan=2)
 
     def run(self):
         self.window.mainloop()
 
-
-# execução
 app = Gui()
 app.run()
