@@ -69,27 +69,27 @@ class ClienteDAO:
         self.db.disconnect()
         return rows
 
-    def search(self, nome="", sobrenome="", email="", cpf=""):
+    def search(self, nome="", user="", email="", cpf=""):
         self.db.connect()
 
         self.db.execute("""
             SELECT * FROM clientes 
             WHERE nome=? OR user=? OR email=? OR cpf=?
-        """, (nome, sobrenome, email, cpf))
+        """, (nome, user, email, cpf))
 
         rows = self.db.fetchall()
 
         self.db.disconnect()
         return rows
 
-    def update(self, id, nome, sobrenome, email, cpf):
+    def update(self, id, nome, user, email, cpf):
         self.db.connect()
 
         self.db.execute("""
             UPDATE clientes 
             SET nome=?, user=?, email=?, cpf=? 
             WHERE id=?
-        """, (nome, sobrenome, email, cpf, id))
+        """, (nome, user, email, cpf, id))
 
         self.db.commit()
         self.db.disconnect()

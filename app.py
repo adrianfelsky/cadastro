@@ -1,25 +1,29 @@
 from front import Gui
 from back import ClienteDAO
+from tkinter import END
 
 
-class AppController:
+class Controller:
     def __init__(self):
         self.view = Gui()
         self.dao = ClienteDAO()
         self.selected = None
 
-        self.view.list_clientes.bind('<<ListboxSelect>>', self.on_select)
+        # Eventos
+        self.dao.create_table()
+        self.view_all()
+        self.view.listClientes.bind('<<ListboxSelect>>', self.on_select)
 
-        self.view.btn_view_all.config(command=self.view_all)
-        self.view.btn_buscar.config(command=self.search)
-        self.view.btn_inserir.config(command=self.insert)
-        self.view.btn_atualizar.config(command=self.update)
-        self.view.btn_deletar.config(command=self.delete)
-        self.view.btn_fechar.config(command=self.view.window.destroy)
+        # Botões
+        self.view.btnViewAll.config(command=self.view_all)
+        self.view.btnBuscar.config(command=self.search)
+        self.view.btnInserir.config(command=self.insert)
+        self.view.btnUpdate.config(command=self.update)
+        self.view.btnDel.config(command=self.delete)
 
     def view_all(self):
         rows = self.dao.view()
-        self._update_list(rows)
+        self.update_list(rows)
 
     def search(self):
         rows = self.dao.search(
@@ -28,7 +32,7 @@ class AppController:
             self.view.email.get(),
             self.view.cpf.get()
         )
-        self._update_list(rows)
+        self.update_list(rows)
 
     def insert(self):
         self.dao.insert(
@@ -50,32 +54,40 @@ class AppController:
             )
             self.view_all()
 
+    def delete(self):
         if self.selected:
             self.dao.delete(self.selected[0])
             self.view_all()
 
     def on_select(self, event):
         try:
-            index = self.view.list_clientes.curselection()[0]
-            self.selected = self.view.list_clientes.get(index)
+            index = self.view.listClientes.curselection()[0]
+            self.selected = self.view.listClientes.get(index)
 
-            self.view.set_fields(
-                self.selected[1],
-                self.selected[2],
-                self.selected[3],
-                self.selected[4]
-            )
+            self.view.entNome.delete(0, END)
+            self.view.entNome.insert(END, self.selected[1])
+
+            self.view.entUser.delete(0, END)
+            self.view.entUser.insert(END, self.selected[2])
+
+            self.view.entEmail.delete(0, END)
+            self.view.entEmail.insert(END, self.selected[3])
+
+            self.view.entCPF.delete(0, END)
+            self.view.entCPF.insert(END, self.selected[4])
+
         except IndexError:
             self.selected = None
 
-    def _update_list(self, rows):
-        self.view.list_clientes.delete(0, 'end')
+    def update_list(self, rows):
+        self.view.listClientes.delete(0, END)
         for r in rows:
-            self.view.list_clientes.insert('end', r)
+            self.view.listClientes.insert(END, r)
 
     def run(self):
         self.view.run()
 
+
 if __name__ == "__main__":
-    app = AppController()
+    app = Controller()
     app.run()
